@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+	label.filebutton {
+	    width:120px;
+	    height:200px;
+	    overflow:hidden;
+	    position:relative;
+	   /*  background-color:#ccc; */
+	}
+	label img {
+		width: 100%;
+		height: 170px;
+		padding-bottom: 20px;
+	}
+
+	label span input {
+	    z-index: 999;
+	    line-height: 0;
+	    font-size: 50px;
+	    position: absolute;
+	    top: -2px;
+	    left: -700px;
+	    opacity: 0;
+	    filter: alpha(opacity = 0);
+	    -ms-filter: "alpha(opacity=0)";
+	    cursor: pointer;
+	    _cursor: hand;
+	    margin: 0;
+	    padding:0;
+	}
+	.removeFile {
+		color: red;
+    	cursor: pointer;
+	}
+
+</style>
+</head>
+<body>
+
+<form  method="post" id="sendfile">
+		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+			
+				
+				
+			
+			<div class="sponsor-details fileSponsore">
+				
+					
+				<label class="filebutton">
+					<!-- Browse For File! -->
+					<span><input type="file" class="myfile first" name="myfile[]" onchange="loadFile(event)"></span>
+					<img src="assets/images/1146209.png" class="output"/>
+				</label>
+			 
+				       
+				
+			</div><!-- Sponsor details -->
+
+
+		</div><!-- Col 2 end -->
+		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+			<input type="button" name="submit" id="submitfrm" value="submit">
+		</div>
+	</form>
+
+<script type="text/javascript">
+var fileTypes = ['jpg', 'jpeg', 'png'];
+	        var loadFile = function(event) {
+	        	var _t = $(this);
+	        	if(!event.target.files || !event.target.files[0]){
+	        		return false;
+	        	}
+	        	var extension = event.target.files[0].name.split('.').pop().toLowerCase(),  //file extension from input file
+	            isSuccess = fileTypes.indexOf(extension) > -1;
+
+	             if (isSuccess) {
+				    var reader = new FileReader();
+				    reader.onload = function(){
+				    	console.log($(event.target).parents('.filebutton'));
+				      /*var output = document.getElementById('output');
+				      output.src = reader.result;*/
+				      $(event.target).parents('.filebutton').find('.myfile').removeClass('first');
+				      $(event.target).parents('.filebutton').find('.output').attr('src', reader.result);
+				      $(event.target).parents('.filebutton').find('.output').after('<span class="removeFile"> Remove </span> ');
+				      appendNewFileInput();
+				    };
+				    reader.readAsDataURL(event.target.files[0]);
+				} else {
+					alert('Select valid File');
+				}
+			  };
+			  function appendNewFileInput() {
+			  	console.log('append');
+			  	var emtry = $('.fileSponsore').find('.first').length;
+			  	if( emtry < 1 ){
+			  		var html = `<label class="filebutton">
+							
+							<span><input type="file" class="myfile first" name="myfile[]" onchange="loadFile(event)"></span>
+							<img src="assets/images/1146209.png" class="output"/>
+						</label>`;
+					$('.fileSponsore').append(html);
+			  	}
+			  	
+			  }
+
+			  $(document).on('click', '.removeFile', function(event) {
+			  	event.preventDefault();
+			  	event.stopPropagation();
+			  		var _t1 = $(this);
+			  		_t1.parents('.filebutton').remove();
+			  });
+
+		</script>		  
+</body>
+</html>
